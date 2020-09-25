@@ -1,0 +1,27 @@
+version: '3.1'
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+    - 27017:27017
+    networks:
+      - mom
+
+  short_url:
+    build: ./app
+    container_name: short_url
+    depends_on:
+      - mongo
+    ports:
+      - 8080:8080
+    volumes:
+      - ./app:/go/src/short_url/app
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+    networks:
+      - mom
+
+networks:
+  mom:
+    driver: bridge
